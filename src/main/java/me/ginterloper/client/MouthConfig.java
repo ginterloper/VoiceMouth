@@ -1,4 +1,4 @@
-package com.example.client;
+package me.ginterloper.client;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -12,9 +12,9 @@ import java.io.IOException;
 public class MouthConfig {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private static final File CONFIG_FILE = new File("config/mouth-voice.json");
+    private static final File CONFIG_FILE = new File("config/voicemouth.json");
 
-    private static Identifier currentMouth = Identifier.of("mouth-voice", "textures/entity/mouth-standard.png");
+    private static Identifier currentMouth = Identifier.of("voicemouth", "textures/entity/mouth-standard.png");
 
     public static void setMouth(Identifier id) {
         currentMouth = id;
@@ -38,7 +38,7 @@ public class MouthConfig {
                 currentMouth = Identifier.of(data.selectedMouth);
             }
         } catch (IOException e) {
-            System.err.println("Не удалось загрузить конфиг mouth-voice: " + e.getMessage());
+            System.err.println("Не удалось загрузить конфиг voicemouth: " + e.getMessage());
         }
     }
 
@@ -50,7 +50,7 @@ public class MouthConfig {
         try (FileWriter writer = new FileWriter(CONFIG_FILE)) {
             GSON.toJson(data, writer);
         } catch (IOException e) {
-            System.err.println("Не удалось сохранить конфиг mouth-voice: " + e.getMessage());
+            System.err.println("Не удалось сохранить конфиг voicemouth: " + e.getMessage());
         }
     }
 

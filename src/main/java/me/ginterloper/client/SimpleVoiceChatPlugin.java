@@ -1,4 +1,4 @@
-package com.example.client;
+package me.ginterloper.client;
 
 import de.maxhenkel.voicechat.api.VoicechatApi;
 import de.maxhenkel.voicechat.api.VoicechatPlugin;
@@ -13,7 +13,7 @@ public class SimpleVoiceChatPlugin implements VoicechatPlugin{
     private static VoicechatApi voicechatApi;
 
     public String getPluginId() {
-        return "mouth-voice";
+        return "voicemouth";
     }
 
     public void initialize(VoicechatApi api) {
@@ -32,9 +32,11 @@ public class SimpleVoiceChatPlugin implements VoicechatPlugin{
     }
 
     private void onClientPlayerSoundEvent(ClientSoundEvent event) {
-        UUID senderUuid = MinecraftClient.getInstance().player.getUuid();
-        if (senderUuid != null) {
-            VoiceStateManager.setTalking(senderUuid);
+        if (MinecraftClient.getInstance().player != null) {
+            UUID senderUuid = MinecraftClient.getInstance().player.getUuid();
+            if (senderUuid != null) {
+                VoiceStateManager.setTalking(senderUuid);
+            }
         }
     }
 

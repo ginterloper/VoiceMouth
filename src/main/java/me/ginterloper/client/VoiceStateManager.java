@@ -1,4 +1,4 @@
-package com.example.client;
+package me.ginterloper.client;
 
 import java.util.Set;
 import java.util.UUID;

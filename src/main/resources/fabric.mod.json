@@ -11,17 +11,17 @@
 		"sources": "https://github.com/ginterloper/VoiceMouth/"
 	},
 	"license": "CC BY-NC 4.0",
-	"icon": "assets/mouth-voice/icon.png",
+	"icon": "assets/voicemouth/icon.png",
 	"environment": "*",
 	"entrypoints": {
         "main": [
-          "com.example.MouthVoice"
+          "me.ginterloper.MouthVoice"
         ],
         "client": [
-          "com.example.client.MouthVoiceClient"
+          "me.ginterloper.client.MouthVoiceClient"
         ],
         "voicechat": [
-          "com.example.client.SimpleVoiceChatPlugin"
+          "me.ginterloper.client.SimpleVoiceChatPlugin"
         ]
 	},
 	"mixins": [

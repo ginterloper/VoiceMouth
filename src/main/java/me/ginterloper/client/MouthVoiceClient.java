@@ -1,10 +1,10 @@
-package com.example.client;
+package me.ginterloper.client;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
 
-import com.example.renderer.MouthRenderer;
+import me.ginterloper.renderer.MouthRenderer;
 
 public class MouthVoiceClient implements ClientModInitializer {
 

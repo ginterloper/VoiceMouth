@@ -1,7 +1,7 @@
-package com.example.renderer;
+package me.ginterloper.renderer;
 
-import com.example.client.MouthConfig;
-import com.example.client.VoiceStateManager;
+import me.ginterloper.client.MouthConfig;
+import me.ginterloper.client.VoiceStateManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.RenderLayer;
@@ -12,7 +12,6 @@ import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.render.entity.state.PlayerEntityRenderState;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
 import net.minecraft.client.render.OverlayTexture;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
@@ -93,6 +92,7 @@ public class MouthRenderer extends FeatureRenderer<PlayerEntityRenderState, Play
 
                     int totalFrames = TEXTURE_HEIGHT / FRAME_SIZE;
 
+                    assert MinecraftClient.getInstance().world != null;
                     long worldTime = MinecraftClient.getInstance().world.getTime();
                     int frame = (int) ((worldTime / FRAME_TIME) % totalFrames);
 

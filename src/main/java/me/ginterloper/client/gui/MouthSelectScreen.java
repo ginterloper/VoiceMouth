@@ -1,4 +1,4 @@
-package com.example.client.gui;
+package me.ginterloper.client.gui;
 
 import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
@@ -35,9 +35,9 @@ public class MouthSelectScreen extends Screen {
 
         addSelectableChild(mouthList);
 
-        mouthList.addMouth("gui.mouth_voice.standard", Identifier.of("mouth-voice", "textures/entity/mouth-standard.png"), 48);
-        mouthList.addMouth("gui.mouth_voice.classic", Identifier.of("mouth-voice", "textures/entity/mouth-classic.png"), 48);
-        mouthList.addMouth("gui.mouth_voice.minimal", Identifier.of("mouth-voice", "textures/entity/mouth-minimal.png"), 48);
+        mouthList.addMouth("gui.mouth_voice.standard", Identifier.of("voicemouth", "textures/entity/mouth-standard.png"), 48);
+        mouthList.addMouth("gui.mouth_voice.classic", Identifier.of("voicemouth", "textures/entity/mouth-classic.png"), 48);
+        mouthList.addMouth("gui.mouth_voice.minimal", Identifier.of("voicemouth", "textures/entity/mouth-minimal.png"), 48);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class MouthSelectScreen extends Screen {
         int x = (this.width - WIDTH) / 2 - 2;
         int y = (this.height - HEIGHT) / 2 + 2;
 
-        Identifier tex = Identifier.of("mouth-voice", "textures/gui/background.png");
+        Identifier tex = Identifier.of("voicemouth", "textures/gui/background.png");
 
         // Средняя повторяющаяся часть (18 px по текстуре)
         int middleY = y + 16;
@@ -95,6 +95,7 @@ public class MouthSelectScreen extends Screen {
         );
 
         // Заголовок поверх фона
+        assert client != null;
         context.drawText(
                 client.textRenderer,
                 Text.translatable("gui.mouth_voice.title"),

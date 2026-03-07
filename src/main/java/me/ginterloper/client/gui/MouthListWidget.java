@@ -11,11 +11,14 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.Click;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class MouthListWidget extends EntryListWidget<MouthListWidget.MouthEntry> {
 
-    private static final int ITEM_HEIGHT = 30;   // ← 24–30 — подбери визуально комфортное
+    private static final int ITEM_HEIGHT = 30;
     private static final int ICON_SIZE = 16;
+    private static final Logger log = LogManager.getLogger(MouthListWidget.class);
 
     public MouthListWidget(MinecraftClient client, int width, int height, int top, int bottom) {
         super(client, width, height, top, bottom);
@@ -24,8 +27,7 @@ public class MouthListWidget extends EntryListWidget<MouthListWidget.MouthEntry>
             field.setAccessible(true);
             field.set(this, ITEM_HEIGHT);
         } catch (Exception e) {
-            // логгируем ошибку, но не крашим игру
-            e.printStackTrace();
+            log.error("e: ", e);
         }
     }
 
@@ -38,14 +40,8 @@ public class MouthListWidget extends EntryListWidget<MouthListWidget.MouthEntry>
         return this.width - 8;
     }
 
-//    @Override
-//    protected int getScrollbarPositionX() {
-//        return this.getRight() - 6;
-//    }
-
     @Override
     protected void appendClickableNarrations(NarrationMessageBuilder builder) {
-        // пусто
     }
 
     public class MouthEntry extends Entry<MouthEntry> {
@@ -84,7 +80,7 @@ public class MouthListWidget extends EntryListWidget<MouthListWidget.MouthEntry>
             int iconX = x + 6;
 
             boolean isSelected = MouthConfig.getMouth().equals(this.texture);
-            int padding = 2;  // отступ сверху и снизу внутри строки
+            int padding = 2;
 
             int bgX = x - padding - 2;
             int bgY = y + padding;
@@ -100,8 +96,6 @@ public class MouthListWidget extends EntryListWidget<MouthListWidget.MouthEntry>
 
             int iconY = bgY + (bgHeight - ICON_SIZE) / 2;
 
-
-            // Анимация рта (как было)
             final int FRAME_SIZE = 16;
             final int FRAME_TIME_MS = 100;
             int totalFrames = textureHeight / FRAME_SIZE;
@@ -122,7 +116,6 @@ public class MouthListWidget extends EntryListWidget<MouthListWidget.MouthEntry>
                 textureHeight
             );
 
-            // Текст названия — можно сделать жирнее/ярче, если выбран
             context.drawText(
                     client.textRenderer,
                     Text.translatable(translationKey),
@@ -132,9 +125,7 @@ public class MouthListWidget extends EntryListWidget<MouthListWidget.MouthEntry>
                     false
             );
 
-            // Опционально: галочка слева или справа от иконки, если выбран
             if (isSelected) {
-                // Можно нарисовать простую галочку текстом или маленькой текстурой
                 context.drawTexture(
                         RenderPipelines.GUI_TEXTURED,
                         Identifier.of("voicemouth", "textures/gui/mouth_selected.png"),

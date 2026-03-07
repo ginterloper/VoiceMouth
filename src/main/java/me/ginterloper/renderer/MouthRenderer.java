@@ -36,11 +36,9 @@ public class MouthRenderer extends FeatureRenderer<PlayerEntityRenderState, Play
                        float limbAngle,
                        float limbDistance) {
 
-        // 1. Получаем имя игрока из displayName
         String playerName = null;
         if (state.displayName != null) {
             playerName = state.displayName.getString();
-            // Убираем цветовые коды §x, если они есть (на всякий случай)
             playerName = playerName.replaceAll("§.", "");
         }
 
@@ -52,27 +50,22 @@ public class MouthRenderer extends FeatureRenderer<PlayerEntityRenderState, Play
             }
         }
 
-        // 2. Ищем запись в таб-листе по имени
         var networkHandler = MinecraftClient.getInstance().getNetworkHandler();
         if (networkHandler == null) return;
 
         var playerEntry = networkHandler.getPlayerListEntry(playerName);
         if (playerEntry == null) {
-            // отладка: иногда имя может не сразу появиться в таб-листе
             System.out.println("Не найден игрок в таб-листе: " + playerName);
             return;
         }
 
-        // 3. Получаем UUID
         UUID uuid = playerEntry.getProfile().id();
         if (uuid == null) return;
 
-        // 4. Проверяем, говорит ли этот игрок
         if (!VoiceStateManager.isTalking(uuid)) {
             return;
         }
 
-        // 5. Рендерим рот
         matrices.push();
         ModelPart head = this.getContextModel().head;
         head.applyTransform(matrices);

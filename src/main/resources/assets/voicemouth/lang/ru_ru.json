@@ -1,7 +1,7 @@
 {
-  "gui.mouth_voice.title": "Выбрать рот",
-  "gui.mouth_voice.standard": "Стандартный",
-  "gui.mouth_voice.classic": "Классический",
-  "gui.mouth_voice.minimal": "Миниатюрный",
-  "gui.mouth_voice.select_mouth": "Нажмите, чтобы настроить отображение рта"
+  "gui.voicemouth.title": "Выбрать рот",
+  "gui.voicemouth.standard": "Стандартный",
+  "gui.voicemouth.classic": "Классический",
+  "gui.voicemouth.minimal": "Миниатюрный",
+  "gui.voicemouth.select_mouth": "Нажмите, чтобы настроить отображение рта"
 }

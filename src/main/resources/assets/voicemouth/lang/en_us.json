@@ -1,7 +1,7 @@
 {
-  "gui.mouth_voice.title": "Select Mouth",
-  "gui.mouth_voice.standard": "Standard",
-  "gui.mouth_voice.classic": "Classic",
-  "gui.mouth_voice.minimal": "Minimal",
-  "gui.mouth_voice.select_mouth": "Press to customize mouth"
+  "gui.voicemouth.title": "Select Mouth",
+  "gui.voicemouth.standard": "Standard",
+  "gui.voicemouth.classic": "Classic",
+  "gui.voicemouth.minimal": "Minimal",
+  "gui.voicemouth.select_mouth": "Press to customize mouth"
 }

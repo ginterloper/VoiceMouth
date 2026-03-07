@@ -14,7 +14,7 @@ public class MouthConfig {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final File CONFIG_FILE = new File("config/voicemouth.json");
 
-    private static Identifier currentMouth = Identifier.of("voicemouth", "textures/entity/mouth-standard.png");
+    private static Identifier currentMouth = Identifier.of("voicemouth", "textures/entity/mouth_standard.png");
 
     public static void setMouth(Identifier id) {
         currentMouth = id;
@@ -25,10 +25,9 @@ public class MouthConfig {
         return currentMouth;
     }
 
-    // Загрузка при запуске мода (вызвать в onInitializeClient)
     public static void load() {
         if (!CONFIG_FILE.exists()) {
-            save(); // создаём файл с дефолтом
+            save();
             return;
         }
 
@@ -42,7 +41,6 @@ public class MouthConfig {
         }
     }
 
-    // Сохранение при выборе
     private static void save() {
         ConfigData data = new ConfigData();
         data.selectedMouth = currentMouth.toString();

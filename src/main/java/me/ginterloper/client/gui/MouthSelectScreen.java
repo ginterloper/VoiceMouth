@@ -13,13 +13,12 @@ public class MouthSelectScreen extends Screen {
     private MouthListWidget mouthList;
 
     public MouthSelectScreen() {
-        super(Text.translatable("gui.mouth_voice.title"));
+        super(Text.translatable("gui.voicemouth.title"));
     }
 
     @Override
     public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
         context.fill(0, 0, this.width, this.height, 0x8C101010);
-//        context.enableScissor(0, 0, this.width, this.height);
     }
 
     @Override
@@ -35,9 +34,9 @@ public class MouthSelectScreen extends Screen {
 
         addSelectableChild(mouthList);
 
-        mouthList.addMouth("gui.mouth_voice.standard", Identifier.of("voicemouth", "textures/entity/mouth-standard.png"), 48);
-        mouthList.addMouth("gui.mouth_voice.classic", Identifier.of("voicemouth", "textures/entity/mouth-classic.png"), 48);
-        mouthList.addMouth("gui.mouth_voice.minimal", Identifier.of("voicemouth", "textures/entity/mouth-minimal.png"), 48);
+        mouthList.addMouth("gui.voicemouth.standard", Identifier.of("voicemouth", "textures/entity/mouth_standard.png"), 48);
+        mouthList.addMouth("gui.voicemouth.classic", Identifier.of("voicemouth", "textures/entity/mouth_classic.png"), 48);
+        mouthList.addMouth("gui.voicemouth.minimal", Identifier.of("voicemouth", "textures/entity/mouth_minimal.png"), 48);
     }
 
     @Override
@@ -47,20 +46,19 @@ public class MouthSelectScreen extends Screen {
 
         Identifier tex = Identifier.of("voicemouth", "textures/gui/background.png");
 
-        // Средняя повторяющаяся часть (18 px по текстуре)
         int middleY = y + 16;
-        int middleHeight = HEIGHT - 16;  // вся высота минус header и footer
-        int repeats = (middleHeight + 17) / 18;  // округляем вверх
+        int middleHeight = HEIGHT - 16;
+        int repeats = (middleHeight + 17) / 18;
 
         for (int i = 0; i < repeats; i++) {
             int drawY = middleY + i * 18;
-            int drawHeight = Math.min(18, middleY + middleHeight - drawY);  // не выходим за пределы
+            int drawHeight = Math.min(18, middleY + middleHeight - drawY);
 
             context.drawTexture(
                     RenderPipelines.GUI_TEXTURED,
                     tex,
                     x, drawY,
-                    0, 16,         // v = 16 (начало средней части)
+                    0, 16,
                     WIDTH + 1, drawHeight,
                     WIDTH + 19, 256
             );
@@ -79,17 +77,16 @@ public class MouthSelectScreen extends Screen {
                 RenderPipelines.GUI_TEXTURED,
                 tex,
                 x, y,
-                0, 0,          // u, v начала
-                WIDTH + 1, 16,     // ширина, высота на экране
-                WIDTH + 19, 256       // размер всей текстуры (подставь свои, если текстура другого размера)
+                0, 0,
+                WIDTH + 1, 16,
+                WIDTH + 19, 256
         );
 
-        // Нижняя часть (32 px высотой)
         context.drawTexture(
                 RenderPipelines.GUI_TEXTURED,
                 tex,
                 x, y + HEIGHT - 8,
-                0, 50,         // v = 34 (начало footer)
+                0, 50,
                 WIDTH + 1, 16,
                 WIDTH + 19, 256
         );
@@ -98,13 +95,11 @@ public class MouthSelectScreen extends Screen {
         assert client != null;
         context.drawText(
                 client.textRenderer,
-                Text.translatable("gui.mouth_voice.title"),
+                Text.translatable("gui.voicemouth.title"),
                 this.width / 2 - client.textRenderer.getWidth("Select Mouth") / 2,
                 y + 5,
                 0xFF000000,
                 false
         );
-
-
     }
 }

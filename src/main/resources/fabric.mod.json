@@ -1,0 +1,35 @@
+{
+	"schemaVersion": 1,
+	"id": "mouth-voice",
+	"version": "${version}",
+	"name": "Mouth Voice",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"ginterloper"
+	],
+	"contact": {
+		"sources": "https://github.com/ginterloper/VoiceMouth/"
+	},
+	"license": "CC BY-NC 4.0",
+	"icon": "assets/mouth-voice/icon.png",
+	"environment": "*",
+	"entrypoints": {
+        "main": [
+          "com.example.MouthVoice"
+        ],
+        "client": [
+          "com.example.client.MouthVoiceClient"
+        ],
+        "voicechat": [
+          "com.example.client.SimpleVoiceChatPlugin"
+        ]
+	},
+	"mixins": [
+		"mouth-voice.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.18.4",
+		"minecraft": "~1.21.10",
+		"java": ">=21"
+	}
+}

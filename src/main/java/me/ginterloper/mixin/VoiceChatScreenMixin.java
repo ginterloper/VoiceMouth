@@ -35,7 +35,7 @@ public abstract class VoiceChatScreenMixin extends Screen {
                         new MouthSelectScreen()
                 )
         );
-        button.setTooltip(Tooltip.of(Text.translatable("gui.mouth_voice.select_mouth")));
+        button.setTooltip(Tooltip.of(Text.translatable("gui.voicemouth.select_mouth")));
         this.addDrawableChild(button);
     }
 

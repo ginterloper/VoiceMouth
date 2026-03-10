@@ -95,7 +95,7 @@ public class MouthSelectScreen extends Screen {
         context.drawText(
                 client.textRenderer,
                 Text.translatable("gui.voicemouth.title"),
-                this.width / 2 - client.textRenderer.getWidth("Select Mouth") / 2,
+                this.width / 2 - client.textRenderer.getWidth(Text.translatable("gui.voicemouth.title")) / 2,
                 y + 5,
                 0xFF000000,
                 false

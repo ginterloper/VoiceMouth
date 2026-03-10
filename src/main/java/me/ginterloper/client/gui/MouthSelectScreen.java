@@ -1,5 +1,6 @@
 package me.ginterloper.client.gui;
 
+import me.ginterloper.client.MouthConfig;
 import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -34,9 +35,9 @@ public class MouthSelectScreen extends Screen {
 
         addSelectableChild(mouthList);
 
-        mouthList.addMouth("gui.voicemouth.standard", Identifier.of("voicemouth", "textures/entity/mouth_standard.png"), 48);
-        mouthList.addMouth("gui.voicemouth.classic", Identifier.of("voicemouth", "textures/entity/mouth_classic.png"), 48);
-        mouthList.addMouth("gui.voicemouth.minimal", Identifier.of("voicemouth", "textures/entity/mouth_minimal.png"), 48);
+        for (MouthConfig.MouthDefinition mouth : MouthConfig.getRegisteredMouths()) {
+            mouthList.addMouth(mouth.translationKey(), mouth.texture(), mouth.textureHeight(), mouth.scale());
+        }
     }
 
     @Override

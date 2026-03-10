@@ -72,6 +72,7 @@ public class MouthRenderer extends FeatureRenderer<PlayerEntityRenderState, Play
         net.minecraft.util.Identifier mouthTexture = isLocalPlayer
                 ? MouthConfig.getMouth()
                 : PlayerMouthStorage.getMouth(uuid);
+        float scale = MouthConfig.getMouthScale(mouthTexture);
 
         matrices.push();
         ModelPart head = this.getContextModel().head;
@@ -102,7 +103,7 @@ public class MouthRenderer extends FeatureRenderer<PlayerEntityRenderState, Play
 
                     drawQuad(
                             m, vertexConsumer, normal,
-                            -4F, -4F, 4F, 4F, 0F,
+                            -scale, -scale, scale, scale, 0F,
                             1F, vEnd,
                             0F, vStart,
                             light

@@ -13,6 +13,7 @@ import net.minecraft.client.render.entity.PlayerEntityRenderer;
 public class MouthVoiceClient implements ClientModInitializer {
 
     public void onInitializeClient() {
+        MouthConfig.initializeMouths();
         MouthConfig.load();
 
         ClientPlayNetworking.registerGlobalReceiver(SyncMouthS2CPayload.TYPE, (payload, context) -> {

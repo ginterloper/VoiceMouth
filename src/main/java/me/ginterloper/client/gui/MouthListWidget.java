@@ -27,8 +27,8 @@ public class MouthListWidget extends EntryListWidget<MouthListWidget.MouthEntry>
         ((me.ginterloper.mixin.EntryListWidgetAccessor) this).voicemouth$setItemHeight(ITEM_HEIGHT);
     }
 
-    public void addMouth(String translationKey, Identifier texture, int texHeight) {
-        this.addEntry(new MouthEntry(translationKey, texture, texHeight));
+    public void addMouth(String translationKey, Identifier texture, int texHeight, float scale) {
+        this.addEntry(new MouthEntry(translationKey, texture, texHeight, scale));
     }
 
     @Override
@@ -45,11 +45,13 @@ public class MouthListWidget extends EntryListWidget<MouthListWidget.MouthEntry>
         private final String translationKey;
         private final Identifier texture;
         private final int textureHeight;
+        private final float scale;
 
-        public MouthEntry(String translationKey, Identifier texture, int textureHeight) {
+        public MouthEntry(String translationKey, Identifier texture, int textureHeight, float scale) {
             this.translationKey = translationKey;
             this.texture = texture;
             this.textureHeight = textureHeight;
+            this.scale = scale;
         }
 
         @Override

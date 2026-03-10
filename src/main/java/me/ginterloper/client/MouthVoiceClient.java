@@ -16,9 +16,7 @@ public class MouthVoiceClient implements ClientModInitializer {
         MouthConfig.initializeMouths();
         MouthConfig.load();
 
-        ClientPlayNetworking.registerGlobalReceiver(SyncMouthS2CPayload.TYPE, (payload, context) -> {
-            PlayerMouthStorage.setMouth(payload.playerUuid(), payload.mouthId());
-        });
+        ClientPlayNetworking.registerGlobalReceiver(SyncMouthS2CPayload.TYPE, (payload, context) -> PlayerMouthStorage.setMouth(payload.playerUuid(), payload.mouthId()));
 
         ClientPlayConnectionEvents.JOIN.register((handler, client, join) -> {
             if (join.player != null) {
@@ -26,9 +24,7 @@ public class MouthVoiceClient implements ClientModInitializer {
             }
         });
 
-        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
-            PlayerMouthStorage.clear();
-        });
+        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> PlayerMouthStorage.clear());
 
         LivingEntityFeatureRendererRegistrationCallback.EVENT.register(
             (entityType, entityRenderer, registrationHelper, context) -> {

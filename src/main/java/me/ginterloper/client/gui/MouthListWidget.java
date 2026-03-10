@@ -12,15 +12,12 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.Click;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class MouthListWidget extends EntryListWidget<MouthListWidget.MouthEntry> {
 
     private static final int ITEM_HEIGHT = 30;
     private static final int ICON_SIZE = 16;
     private static final Identifier SELECTED_ICON = Identifier.of("voicemouth", "textures/gui/mouth_selected.png");
-    private static final Logger log = LogManager.getLogger(MouthListWidget.class);
 
     public MouthListWidget(MinecraftClient client, int width, int height, int top, int bottom) {
         super(client, width, height, top, bottom);

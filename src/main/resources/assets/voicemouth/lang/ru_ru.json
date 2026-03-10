@@ -4,5 +4,7 @@
   "gui.voicemouth.realism": "Реализм",
   "gui.voicemouth.classic": "Классический",
   "gui.voicemouth.minimal": "Миниатюрный",
-  "gui.voicemouth.select_mouth": "Нажмите, чтобы настроить отображение рта"
+  "gui.voicemouth.select_mouth": "Нажмите, чтобы настроить отображение рта",
+  "gui.voicemouth.slider_x": "Положение рта на оси X",
+  "gui.voicemouth.slider_y": "Положение рта на оси Y"
 }

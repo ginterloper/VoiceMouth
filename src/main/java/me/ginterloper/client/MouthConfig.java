@@ -32,6 +32,9 @@ public class MouthConfig {
     private static final float DEFAULT_SCALE = 4F;
     private static final Map<Identifier, Float> SCALE_BY_MOUTH = new ConcurrentHashMap<>();
 
+    private static float offsetX = 0F;
+    private static float offsetY = 0F;
+
     public record MouthDefinition(String translationKey, Identifier texture, int textureHeight, float scale) {}
 
     private static final List<MouthDefinition> REGISTERED_MOUTHS = List.of(
@@ -70,6 +73,24 @@ public class MouthConfig {
         return currentMouth;
     }
 
+    public static float getOffsetX() {
+        return offsetX;
+    }
+
+    public static void setOffsetX(float value) {
+        offsetX = value;
+        SAVE_EXECUTOR.execute(MouthConfig::save);
+    }
+
+    public static float getOffsetY() {
+        return offsetY;
+    }
+
+    public static void setOffsetY(float value) {
+        offsetY = value;
+        SAVE_EXECUTOR.execute(MouthConfig::save);
+    }
+
     public static void load() {
         if (!CONFIG_FILE.exists()) {
             save();
@@ -78,8 +99,12 @@ public class MouthConfig {
 
         try (FileReader reader = new FileReader(CONFIG_FILE)) {
             ConfigData data = GSON.fromJson(reader, ConfigData.class);
-            if (data != null && data.selectedMouth != null) {
-                currentMouth = Identifier.of(data.selectedMouth);
+            if (data != null) {
+                if (data.selectedMouth != null) {
+                    currentMouth = Identifier.of(data.selectedMouth);
+                }
+                offsetX = data.offsetX;
+                offsetY = data.offsetY;
             }
         } catch (IOException e) {
             LOGGER.error("Не удалось загрузить конфиг voicemouth", e);
@@ -89,6 +114,8 @@ public class MouthConfig {
     private static void save() {
         ConfigData data = new ConfigData();
         data.selectedMouth = currentMouth.toString();
+        data.offsetX = offsetX;
+        data.offsetY = offsetY;
 
         try (FileWriter writer = new FileWriter(CONFIG_FILE)) {
             GSON.toJson(data, writer);
@@ -99,5 +126,7 @@ public class MouthConfig {
 
     private static class ConfigData {
         String selectedMouth;
+        float offsetX;
+        float offsetY;
     }
 }

@@ -4,5 +4,7 @@
   "gui.voicemouth.realism": "Realism",
   "gui.voicemouth.classic": "Classic",
   "gui.voicemouth.minimal": "Minimal",
-  "gui.voicemouth.select_mouth": "Press to customize mouth"
+  "gui.voicemouth.select_mouth": "Press to customize mouth",
+  "gui.voicemouth.slider_x": "Position of the mouth on the X-axis",
+  "gui.voicemouth.slider_y": "Position of the mouth on the Y-axis"
 }

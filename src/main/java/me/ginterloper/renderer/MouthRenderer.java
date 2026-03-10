@@ -73,11 +73,14 @@ public class MouthRenderer extends FeatureRenderer<PlayerEntityRenderState, Play
                 ? MouthConfig.getMouth()
                 : PlayerMouthStorage.getMouth(uuid);
         float scale = MouthConfig.getMouthScale(mouthTexture);
+        float offsetX = MouthConfig.getOffsetX();
+        float offsetY = MouthConfig.getOffsetY();
 
         matrices.push();
         ModelPart head = this.getContextModel().head;
         head.applyTransform(matrices);
         matrices.translate(0.0F, -0.1F, -0.29F);
+        matrices.translate(offsetX / 16F, offsetY / 16F, 0.0F);
         matrices.scale(1F / 16F, 1F / 16F, 1F / 16F);
 
         queue.submitCustom(
@@ -103,9 +106,9 @@ public class MouthRenderer extends FeatureRenderer<PlayerEntityRenderState, Play
 
                     drawQuad(
                             m, vertexConsumer, normal,
-                            -scale, -scale, scale, scale, 0F,
-                            1F, vEnd,
-                            0F, vStart,
+                            -scale, -scale, scale, scale,
+                            vEnd,
+                            vStart,
                             light
                     );
                 }
@@ -113,10 +116,10 @@ public class MouthRenderer extends FeatureRenderer<PlayerEntityRenderState, Play
         matrices.pop();
     }
 
-    private void drawQuad(Matrix4f matrix, VertexConsumer vc, Vector3f normal, float x1, float y1, float x2, float y2, float z, float u1, float v1, float u2, float v2, int light) {
-        vc.vertex(matrix, x1, y2, z).color(255, 255, 255, 255).texture(u1, v1).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(normal.x, normal.y, normal.z);
-        vc.vertex(matrix, x2, y2, z).color(255, 255, 255, 255).texture(u2, v1).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(normal.x, normal.y, normal.z);
-        vc.vertex(matrix, x2, y1, z).color(255, 255, 255, 255).texture(u2, v2).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(normal.x, normal.y, normal.z);
-        vc.vertex(matrix, x1, y1, z).color(255, 255, 255, 255).texture(u1, v2).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(normal.x, normal.y, normal.z);
+    private void drawQuad(Matrix4f matrix, VertexConsumer vc, Vector3f normal, float x1, float y1, float x2, float y2, float v1, float v2, int light) {
+        vc.vertex(matrix, x1, y2, (float) 0.0).color(255, 255, 255, 255).texture((float) 1.0, v1).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(normal.x, normal.y, normal.z);
+        vc.vertex(matrix, x2, y2, (float) 0.0).color(255, 255, 255, 255).texture((float) 0.0, v1).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(normal.x, normal.y, normal.z);
+        vc.vertex(matrix, x2, y1, (float) 0.0).color(255, 255, 255, 255).texture((float) 0.0, v2).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(normal.x, normal.y, normal.z);
+        vc.vertex(matrix, x1, y1, (float) 0.0).color(255, 255, 255, 255).texture((float) 1.0, v2).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(normal.x, normal.y, normal.z);
     }
 }

@@ -4,6 +4,7 @@ import me.ginterloper.client.MouthConfig;
 import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -26,24 +27,76 @@ public class MouthSelectScreen extends Screen {
     protected void init() {
         mouthList = new MouthListWidget(
                 client,
-                WIDTH - 10,
+                WIDTH - 12,
                 HEIGHT - 23,
                 (height - HEIGHT) / 2,
                 (height - HEIGHT) / 2
         );
-        mouthList.setPosition((width - WIDTH + 10) / 2, (height - HEIGHT + 35) / 2);
+        mouthList.setPosition((width - WIDTH + 10) / 2, (height - HEIGHT - 10) / 2);
 
         addSelectableChild(mouthList);
 
         for (MouthConfig.MouthDefinition mouth : MouthConfig.getRegisteredMouths()) {
             mouthList.addMouth(mouth.translationKey(), mouth.texture(), mouth.textureHeight(), mouth.scale());
         }
+
+        int panelLeft = (width - WIDTH + 4) / 2;
+        int panelRight = (width + WIDTH - 10) / 2;
+        int panelBottom = (height + HEIGHT - 50) / 2;
+
+        int sliderWidth = panelRight - panelLeft - 8;
+        int sliderHeight = 15;
+        int sliderX = panelLeft + 4;
+
+        double normOffsetX = (MouthConfig.getOffsetX() + 4.0) / 8.0;
+        double normOffsetY = (MouthConfig.getOffsetY() + 4.0) / 8.0;
+
+        SliderWidget offsetXSlider = new SliderWidget(
+                sliderX,
+                panelBottom + 4,
+                sliderWidth,
+                sliderHeight,
+                Text.translatable("gui.voicemouth.slider_x"),
+                clamp01(normOffsetX)
+        ) {
+            @Override
+            protected void updateMessage() {
+                this.setMessage(Text.literal("X: " + String.format("%.1f", sliderToOffset(this.value))));
+            }
+
+            @Override
+            protected void applyValue() {
+                MouthConfig.setOffsetX(sliderToOffset(this.value));
+            }
+        };
+
+        SliderWidget offsetYSlider = new SliderWidget(
+                sliderX,
+                panelBottom + 4 + sliderHeight + 4,
+                sliderWidth,
+                sliderHeight,
+                Text.translatable("gui.voicemouth.slider_y"),
+                clamp01(normOffsetY)
+        ) {
+            @Override
+            protected void updateMessage() {
+                this.setMessage(Text.literal("Y: " + String.format("%.1f", sliderToOffset(this.value))));
+            }
+
+            @Override
+            protected void applyValue() {
+                MouthConfig.setOffsetY(sliderToOffset(this.value));
+            }
+        };
+
+        addDrawableChild(offsetXSlider);
+        addDrawableChild(offsetYSlider);
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         int x = (this.width - WIDTH) / 2 - 2;
-        int y = (this.height - HEIGHT) / 2 + 2;
+        int y = (this.height - HEIGHT) / 2 - 20;
 
         Identifier tex = Identifier.of("voicemouth", "textures/gui/background.png");
 
@@ -64,11 +117,12 @@ public class MouthSelectScreen extends Screen {
                     WIDTH + 19, 256
             );
         }
+
         context.fill(
                 (width - WIDTH + 10) / 2,
-                (height - HEIGHT + 35) / 2,
+                (height - HEIGHT - 10) / 2,
                 (width + WIDTH - 14) / 2,
-                (height + HEIGHT - 12) / 2,
+                (height + HEIGHT - 40) / 2,
                 0xFF626262
         );
 
@@ -82,17 +136,27 @@ public class MouthSelectScreen extends Screen {
                 WIDTH + 1, 16,
                 WIDTH + 19, 256
         );
+        for (int i = 0; i < 3; i++) {
+
+            context.drawTexture(
+                    RenderPipelines.GUI_TEXTURED,
+                    tex,
+                    x, y + HEIGHT - 8 + i * 10,
+                    0, 50,
+                    WIDTH + 1, 10,
+                    WIDTH + 19, 256
+            );
+        }
 
         context.drawTexture(
                 RenderPipelines.GUI_TEXTURED,
                 tex,
-                x, y + HEIGHT - 8,
-                0, 50,
-                WIDTH + 1, 16,
+                x, y + HEIGHT + 16,
+                0, 40,
+                WIDTH + 1, 64,
                 WIDTH + 19, 256
         );
 
-        assert client != null;
         context.drawText(
                 client.textRenderer,
                 Text.translatable("gui.voicemouth.title"),
@@ -101,5 +165,15 @@ public class MouthSelectScreen extends Screen {
                 0xFF000000,
                 false
         );
+
+        super.render(context, mouseX, mouseY, delta);
+    }
+
+    private static double clamp01(double value) {
+        return Math.max(0.0, Math.min(1.0, value));
+    }
+
+    private static float sliderToOffset(double sliderValue) {
+        return (float) Math.round((sliderValue * 8.0 - 4.0) * 10) / 10;
     }
 }

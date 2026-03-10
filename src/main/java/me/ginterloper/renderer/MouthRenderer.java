@@ -1,6 +1,7 @@
 package me.ginterloper.renderer;
 
 import me.ginterloper.client.MouthConfig;
+import me.ginterloper.client.PlayerMouthStorage;
 import me.ginterloper.client.VoiceStateManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.ModelPart;
@@ -66,6 +67,12 @@ public class MouthRenderer extends FeatureRenderer<PlayerEntityRenderState, Play
             return;
         }
 
+        var localPlayer = MinecraftClient.getInstance().player;
+        boolean isLocalPlayer = localPlayer != null && uuid.equals(localPlayer.getUuid());
+        net.minecraft.util.Identifier mouthTexture = isLocalPlayer
+                ? MouthConfig.getMouth()
+                : PlayerMouthStorage.getMouth(uuid);
+
         matrices.push();
         ModelPart head = this.getContextModel().head;
         head.applyTransform(matrices);
@@ -74,7 +81,7 @@ public class MouthRenderer extends FeatureRenderer<PlayerEntityRenderState, Play
 
         queue.submitCustom(
                 matrices,
-                RenderLayer.getEntityCutout(MouthConfig.getMouth()),
+                RenderLayer.getEntityCutout(mouthTexture),
                 (entry, vertexConsumer) -> {
 
                     Matrix4f m = entry.getPositionMatrix();

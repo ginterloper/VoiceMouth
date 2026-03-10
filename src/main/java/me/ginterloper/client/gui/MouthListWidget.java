@@ -59,12 +59,19 @@ public class MouthListWidget extends EntryListWidget<MouthListWidget.MouthEntry>
         @Override
         public boolean mouseClicked(Click click, boolean doubled) {
             MouthConfig.setMouth(this.texture);
-            MinecraftClient.getInstance().getSoundManager().play(
+            var client = MinecraftClient.getInstance();
+            client.getSoundManager().play(
                     PositionedSoundInstance.master(
                             SoundEvents.UI_BUTTON_CLICK.value(),
                             1.0f, 0.1f
                             )
-        );
+            );
+            // Синхронизация выбора рта с сервером для отображения другим игрокам
+            if (client.getNetworkHandler() != null && client.player != null) {
+                net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.send(
+                        new me.ginterloper.network.SelectMouthC2SPayload(this.texture.toString())
+                );
+            }
             return super.mouseClicked(click, doubled);
         }
 

@@ -3,22 +3,33 @@ package me.ginterloper.client;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.minecraft.util.Identifier;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MouthConfig {
 
+    private static final Logger LOGGER = LogManager.getLogger(MouthConfig.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final File CONFIG_FILE = new File("config/voicemouth.json");
+    private static final ExecutorService SAVE_EXECUTOR =
+            Executors.newSingleThreadExecutor(r -> {
+                Thread t = new Thread(r, "voicemouth-config-writer");
+                t.setDaemon(true);
+                return t;
+            });
 
     private static Identifier currentMouth = Identifier.of("voicemouth", "textures/entity/mouth_standard.png");
 
     public static void setMouth(Identifier id) {
         currentMouth = id;
-        save();
+        SAVE_EXECUTOR.execute(MouthConfig::save);
     }
 
     public static Identifier getMouth() {
@@ -37,7 +48,7 @@ public class MouthConfig {
                 currentMouth = Identifier.of(data.selectedMouth);
             }
         } catch (IOException e) {
-            System.err.println("Не удалось загрузить конфиг voicemouth: " + e.getMessage());
+            LOGGER.error("Не удалось загрузить конфиг voicemouth", e);
         }
     }
 
@@ -48,11 +59,10 @@ public class MouthConfig {
         try (FileWriter writer = new FileWriter(CONFIG_FILE)) {
             GSON.toJson(data, writer);
         } catch (IOException e) {
-            System.err.println("Не удалось сохранить конфиг voicemouth: " + e.getMessage());
+            LOGGER.error("Не удалось сохранить конфиг voicemouth", e);
         }
     }
 
-    // Внутренний класс для JSON
     private static class ConfigData {
         String selectedMouth;
     }

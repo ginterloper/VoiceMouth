@@ -1,6 +1,7 @@
 package me.ginterloper.client.gui;
 
 import me.ginterloper.client.MouthConfig;
+import me.ginterloper.client.MouthVoiceClient;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.EntryListWidget;
@@ -18,17 +19,12 @@ public class MouthListWidget extends EntryListWidget<MouthListWidget.MouthEntry>
 
     private static final int ITEM_HEIGHT = 30;
     private static final int ICON_SIZE = 16;
+    private static final Identifier SELECTED_ICON = Identifier.of("voicemouth", "textures/gui/mouth_selected.png");
     private static final Logger log = LogManager.getLogger(MouthListWidget.class);
 
     public MouthListWidget(MinecraftClient client, int width, int height, int top, int bottom) {
         super(client, width, height, top, bottom);
-        try {
-            java.lang.reflect.Field field = EntryListWidget.class.getDeclaredField("itemHeight");
-            field.setAccessible(true);
-            field.set(this, ITEM_HEIGHT);
-        } catch (Exception e) {
-            log.error("e: ", e);
-        }
+        ((me.ginterloper.mixin.EntryListWidgetAccessor) this).voicemouth$setItemHeight(ITEM_HEIGHT);
     }
 
     public void addMouth(String translationKey, Identifier texture, int texHeight) {
@@ -66,12 +62,7 @@ public class MouthListWidget extends EntryListWidget<MouthListWidget.MouthEntry>
                             1.0f, 0.1f
                             )
             );
-            // Синхронизация выбора рта с сервером для отображения другим игрокам
-            if (client.getNetworkHandler() != null && client.player != null) {
-                net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.send(
-                        new me.ginterloper.network.SelectMouthC2SPayload(this.texture.toString())
-                );
-            }
+            MouthVoiceClient.syncSelectedMouthToServer();
             return super.mouseClicked(click, doubled);
         }
 
@@ -135,7 +126,7 @@ public class MouthListWidget extends EntryListWidget<MouthListWidget.MouthEntry>
             if (isSelected) {
                 context.drawTexture(
                         RenderPipelines.GUI_TEXTURED,
-                        Identifier.of("voicemouth", "textures/gui/mouth_selected.png"),
+                        SELECTED_ICON,
                         iconX,
                         iconY,
                         0,

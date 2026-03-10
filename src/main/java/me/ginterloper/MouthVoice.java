@@ -29,7 +29,6 @@ public class MouthVoice implements ModInitializer {
 			ServerPlayerEntity player = context.player();
 			UUID uuid = player.getUuid();
 			SERVER_MOUTH_MAP.put(uuid, mouthId);
-			// Рассылаем всем игрокам в мире (включая отправителя)
 			for (ServerPlayerEntity other : net.fabricmc.fabric.api.networking.v1.PlayerLookup.world((ServerWorld) player.getEntityWorld())) {
 				ServerPlayNetworking.send(other, new SyncMouthS2CPayload(uuid, mouthId));
 			}
@@ -38,7 +37,6 @@ public class MouthVoice implements ModInitializer {
 		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
 			ServerPlayerEntity joining = handler.getPlayer();
 			UUID joiningUuid = joining.getUuid();
-			// Отправляем присоединившемуся все текущие выборы ртов
 			for (Map.Entry<UUID, String> e : SERVER_MOUTH_MAP.entrySet()) {
 				ServerPlayNetworking.send(joining, new SyncMouthS2CPayload(e.getKey(), e.getValue()));
 			}

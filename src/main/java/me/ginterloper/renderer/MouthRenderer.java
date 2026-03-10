@@ -43,6 +43,7 @@ public class MouthRenderer extends FeatureRenderer<PlayerEntityRenderState, Play
             playerName = playerName.replaceAll("§.", "");
         }
 
+        MinecraftClient client = MinecraftClient.getInstance();
 
         if (playerName == null || playerName.isEmpty()) {
             var localPlayer = MinecraftClient.getInstance().player;
@@ -56,7 +57,6 @@ public class MouthRenderer extends FeatureRenderer<PlayerEntityRenderState, Play
 
         var playerEntry = networkHandler.getPlayerListEntry(playerName);
         if (playerEntry == null) {
-            System.out.println("Не найден игрок в таб-листе: " + playerName);
             return;
         }
 
@@ -67,7 +67,7 @@ public class MouthRenderer extends FeatureRenderer<PlayerEntityRenderState, Play
             return;
         }
 
-        var localPlayer = MinecraftClient.getInstance().player;
+        var localPlayer = client.player;
         boolean isLocalPlayer = localPlayer != null && uuid.equals(localPlayer.getUuid());
         net.minecraft.util.Identifier mouthTexture = isLocalPlayer
                 ? MouthConfig.getMouth()

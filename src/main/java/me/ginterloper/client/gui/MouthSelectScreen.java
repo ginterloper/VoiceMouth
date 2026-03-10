@@ -91,7 +91,6 @@ public class MouthSelectScreen extends Screen {
                 WIDTH + 19, 256
         );
 
-        // Заголовок поверх фона
         assert client != null;
         context.drawText(
                 client.textRenderer,

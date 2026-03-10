@@ -7,6 +7,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
 
 public class MouthVoiceClient implements ClientModInitializer {
@@ -19,9 +20,8 @@ public class MouthVoiceClient implements ClientModInitializer {
         });
 
         ClientPlayConnectionEvents.JOIN.register((handler, client, join) -> {
-            // При входе на сервер сообщаем свой текущий выбор рта
             if (join.player != null) {
-                ClientPlayNetworking.send(new SelectMouthC2SPayload(MouthConfig.getMouth().toString()));
+                syncSelectedMouthToServer();
             }
         });
 
@@ -38,5 +38,13 @@ public class MouthVoiceClient implements ClientModInitializer {
                 }
             }
         );
+    }
+
+    public static void syncSelectedMouthToServer() {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client == null || client.getNetworkHandler() == null || client.player == null) {
+            return;
+        }
+        ClientPlayNetworking.send(new SelectMouthC2SPayload(MouthConfig.getMouth().toString()));
     }
 }

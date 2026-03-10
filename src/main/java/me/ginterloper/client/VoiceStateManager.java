@@ -22,6 +22,7 @@ public class VoiceStateManager {
 
         if (System.currentTimeMillis() - last > TALK_TIMEOUT_MS) {
             TALKING_PLAYERS.remove(uuid);
+            LAST_TALK_TIME.remove(uuid);
             return false;
         }
 

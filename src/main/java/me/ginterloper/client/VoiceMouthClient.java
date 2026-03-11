@@ -10,7 +10,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
 
-public class MouthVoiceClient implements ClientModInitializer {
+public class VoiceMouthClient implements ClientModInitializer {
 
     public void onInitializeClient() {
         MouthConfig.initializeMouths();

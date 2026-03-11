@@ -15,10 +15,10 @@
 	"environment": "*",
 	"entrypoints": {
         "main": [
-          "me.ginterloper.MouthVoice"
+          "me.ginterloper.VoiceMouth"
         ],
         "client": [
-          "me.ginterloper.client.MouthVoiceClient"
+          "me.ginterloper.client.VoiceMouthClient"
         ],
         "voicechat": [
           "me.ginterloper.client.SimpleVoiceChatPlugin"

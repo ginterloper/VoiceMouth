@@ -7,13 +7,12 @@ import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class MouthVoice implements ModInitializer {
+public class VoiceMouth implements ModInitializer {
 
 	/** Серверное хранилище: UUID игрока → идентификатор текстуры рта (строка). */
 	private static final Map<UUID, String> SERVER_MOUTH_MAP = new ConcurrentHashMap<>();

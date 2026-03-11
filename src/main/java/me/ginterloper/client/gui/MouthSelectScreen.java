@@ -27,12 +27,12 @@ public class MouthSelectScreen extends Screen {
     protected void init() {
         mouthList = new MouthListWidget(
                 client,
-                WIDTH - 12,
+                WIDTH - 10,
                 HEIGHT - 23,
                 (height - HEIGHT) / 2,
                 (height - HEIGHT) / 2
         );
-        mouthList.setPosition((width - WIDTH + 10) / 2, (height - HEIGHT - 10) / 2);
+        mouthList.setPosition((width - WIDTH + 9) / 2, (height - HEIGHT - 10) / 2);
 
         addSelectableChild(mouthList);
 

@@ -1,7 +1,7 @@
 package me.ginterloper.client.gui;
 
 import me.ginterloper.client.MouthConfig;
-import me.ginterloper.client.MouthVoiceClient;
+import me.ginterloper.client.VoiceMouthClient;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.EntryListWidget;
@@ -61,7 +61,7 @@ public class MouthListWidget extends EntryListWidget<MouthListWidget.MouthEntry>
                             1.0f, 0.1f
                             )
             );
-            MouthVoiceClient.syncSelectedMouthToServer();
+            VoiceMouthClient.syncSelectedMouthToServer();
             return super.mouseClicked(click, doubled);
         }
 

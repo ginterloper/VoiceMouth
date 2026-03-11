@@ -38,7 +38,7 @@ public class MouthConfig {
     public record MouthDefinition(String translationKey, Identifier texture, int textureHeight, float scale) {}
 
     private static final List<MouthDefinition> REGISTERED_MOUTHS = List.of(
-            new MouthDefinition("gui.voicemouth.standard", Identifier.of("voicemouth", "textures/entity/mouth_standard.png"), 48, 2F),
+            new MouthDefinition("gui.voicemouth.standard", Identifier.of("voicemouth", "textures/entity/mouth_standard.png"), 48, 3F),
             new MouthDefinition("gui.voicemouth.realism", Identifier.of("voicemouth", "textures/entity/mouth_realism.png"), 48, 2F),
             new MouthDefinition("gui.voicemouth.lipped", Identifier.of("voicemouth", "textures/entity/mouth_lipped.png"), 48, 2F),
             new MouthDefinition("gui.voicemouth.classic", Identifier.of("voicemouth", "textures/entity/mouth_classic.png"), 48, 3F),

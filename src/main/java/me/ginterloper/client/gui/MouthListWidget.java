@@ -1,7 +1,8 @@
 package me.ginterloper.client.gui;
 
-import me.ginterloper.client.MouthConfig;
 import me.ginterloper.client.VoiceMouthClient;
+import me.ginterloper.client.config.MouthConfig;
+import me.ginterloper.core.ModConstants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.EntryListWidget;
@@ -17,7 +18,7 @@ public class MouthListWidget extends EntryListWidget<MouthListWidget.MouthEntry>
 
     private static final int ITEM_HEIGHT = 30;
     private static final int ICON_SIZE = 16;
-    private static final Identifier SELECTED_ICON = Identifier.of("voicemouth", "textures/gui/mouth_selected.png");
+    private static final Identifier SELECTED_ICON = Identifier.of(ModConstants.MOD_ID, "textures/gui/mouth_selected.png");
 
     public MouthListWidget(MinecraftClient client, int width, int height, int top, int bottom) {
         super(client, width, height, top, bottom);

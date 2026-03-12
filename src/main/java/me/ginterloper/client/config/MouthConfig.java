@@ -1,7 +1,8 @@
-package me.ginterloper.client;
+package me.ginterloper.client.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import me.ginterloper.core.ModConstants;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,6 +13,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -20,7 +22,7 @@ public class MouthConfig {
 
     private static final Logger LOGGER = LogManager.getLogger(MouthConfig.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private static final File CONFIG_FILE = new File("config/voicemouth.json");
+    private static final File CONFIG_FILE = new File(ModConstants.CONFIG_DIR, ModConstants.CLIENT_CONFIG_FILE);
     private static final ExecutorService SAVE_EXECUTOR =
             Executors.newSingleThreadExecutor(r -> {
                 Thread t = new Thread(r, "voicemouth-config-writer");
@@ -28,7 +30,7 @@ public class MouthConfig {
                 return t;
             });
 
-    private static Identifier currentMouth = Identifier.of("voicemouth", "textures/entity/mouth_standard.png");
+    private static Identifier currentMouth = Identifier.of(ModConstants.MOD_ID, "textures/entity/mouth_standard.png");
     private static final float DEFAULT_SCALE = 4F;
     private static final Map<Identifier, Float> SCALE_BY_MOUTH = new ConcurrentHashMap<>();
 
@@ -38,11 +40,11 @@ public class MouthConfig {
     public record MouthDefinition(String translationKey, Identifier texture, int textureHeight, float scale) {}
 
     private static final List<MouthDefinition> REGISTERED_MOUTHS = List.of(
-            new MouthDefinition("gui.voicemouth.standard", Identifier.of("voicemouth", "textures/entity/mouth_standard.png"), 48, 3F),
-            new MouthDefinition("gui.voicemouth.realism", Identifier.of("voicemouth", "textures/entity/mouth_realism.png"), 48, 2F),
-            new MouthDefinition("gui.voicemouth.lipped", Identifier.of("voicemouth", "textures/entity/mouth_lipped.png"), 48, 2F),
-            new MouthDefinition("gui.voicemouth.classic", Identifier.of("voicemouth", "textures/entity/mouth_classic.png"), 48, 3F),
-            new MouthDefinition("gui.voicemouth.minimal", Identifier.of("voicemouth", "textures/entity/mouth_minimal.png"), 48, 3F)
+            new MouthDefinition("gui.voicemouth.standard", Identifier.of(ModConstants.MOD_ID, "textures/entity/mouth_standard.png"), 48, 3F),
+            new MouthDefinition("gui.voicemouth.realism", Identifier.of(ModConstants.MOD_ID, "textures/entity/mouth_realism.png"), 48, 2F),
+            new MouthDefinition("gui.voicemouth.lipped", Identifier.of(ModConstants.MOD_ID, "textures/entity/mouth_lipped.png"), 48, 2F),
+            new MouthDefinition("gui.voicemouth.classic", Identifier.of(ModConstants.MOD_ID, "textures/entity/mouth_classic.png"), 48, 3F),
+            new MouthDefinition("gui.voicemouth.minimal", Identifier.of(ModConstants.MOD_ID, "textures/entity/mouth_minimal.png"), 48, 3F)
     );
 
     public static void registerMouth(Identifier id, float scale) {
@@ -58,6 +60,15 @@ public class MouthConfig {
 
     public static List<MouthDefinition> getRegisteredMouths() {
         return REGISTERED_MOUTHS;
+    }
+
+    public static Optional<MouthDefinition> findByTexture(Identifier id) {
+        if (id == null) {
+            return Optional.empty();
+        }
+        return REGISTERED_MOUTHS.stream()
+                .filter(mouth -> mouth.texture().equals(id))
+                .findFirst();
     }
 
     public static float getMouthScale(Identifier id) {

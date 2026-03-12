@@ -1,6 +1,7 @@
 package me.ginterloper.client.gui;
 
-import me.ginterloper.client.MouthConfig;
+import me.ginterloper.client.config.MouthConfig;
+import me.ginterloper.core.ModConstants;
 import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -98,7 +99,7 @@ public class MouthSelectScreen extends Screen {
         int x = (this.width - WIDTH) / 2 - 2;
         int y = (this.height - HEIGHT) / 2 - 20;
 
-        Identifier tex = Identifier.of("voicemouth", "textures/gui/background.png");
+        Identifier tex = Identifier.of(ModConstants.MOD_ID, "textures/gui/background.png");
 
         int middleY = y + 16;
         int middleHeight = HEIGHT - 16;

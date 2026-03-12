@@ -1,5 +1,7 @@
-package me.ginterloper.client;
+package me.ginterloper.client.storage;
 
+import me.ginterloper.client.config.MouthConfig;
+import me.ginterloper.core.ModConstants;
 import net.minecraft.util.Identifier;
 
 import java.util.Map;
@@ -13,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class PlayerMouthStorage {
 
     private static final Identifier DEFAULT_MOUTH =
-            Identifier.of("voicemouth", "textures/entity/mouth_standard.png");
+            Identifier.of(ModConstants.MOD_ID, "textures/entity/mouth_standard.png");
 
     private static final Map<UUID, Identifier> MOUTH_BY_UUID = new ConcurrentHashMap<>();
 

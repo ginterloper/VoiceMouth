@@ -1,8 +1,8 @@
-package me.ginterloper.renderer;
+package me.ginterloper.client.render;
 
-import me.ginterloper.client.MouthConfig;
-import me.ginterloper.client.PlayerMouthStorage;
 import me.ginterloper.client.VoiceStateManager;
+import me.ginterloper.client.config.MouthConfig;
+import me.ginterloper.client.storage.PlayerMouthStorage;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.RenderLayer;
@@ -37,41 +37,23 @@ public class MouthRenderer extends FeatureRenderer<PlayerEntityRenderState, Play
                        float limbAngle,
                        float limbDistance) {
 
-        String playerName = null;
-        if (state.displayName != null) {
-            playerName = state.displayName.getString();
-            playerName = playerName.replaceAll("§.", "");
-        }
-
         MinecraftClient client = MinecraftClient.getInstance();
 
-        if (playerName == null || playerName.isEmpty()) {
-            var localPlayer = MinecraftClient.getInstance().player;
-            if (localPlayer != null) {
-                playerName = localPlayer.getName().getString();
-            }
-        }
-
-        var networkHandler = MinecraftClient.getInstance().getNetworkHandler();
-        if (networkHandler == null) return;
-
-        var playerEntry = networkHandler.getPlayerListEntry(playerName);
-        if (playerEntry == null) {
+        UUID uuid = resolvePlayerUuid(client, state);
+        if (uuid == null) {
             return;
         }
-
-        UUID uuid = playerEntry.getProfile().id();
-        if (uuid == null) return;
 
         if (!VoiceStateManager.isTalking(uuid)) {
             return;
         }
 
-        var localPlayer = client.player;
-        boolean isLocalPlayer = localPlayer != null && uuid.equals(localPlayer.getUuid());
-        net.minecraft.util.Identifier mouthTexture = isLocalPlayer
-                ? MouthConfig.getMouth()
-                : PlayerMouthStorage.getMouth(uuid);
+        boolean isLocalPlayer = client.player != null && uuid.equals(client.player.getUuid());
+        net.minecraft.util.Identifier mouthTexture = getBaseMouthTexture(uuid, isLocalPlayer);
+
+        float volume = VoiceStateManager.getVolume(uuid);
+        mouthTexture = applyShoutVariant(mouthTexture, volume);
+
         float scale = MouthConfig.getMouthScale(mouthTexture);
         float offsetX = MouthConfig.getOffsetX();
         float offsetY = MouthConfig.getOffsetY();
@@ -121,5 +103,57 @@ public class MouthRenderer extends FeatureRenderer<PlayerEntityRenderState, Play
         vc.vertex(matrix, x2, y2, (float) 0.0).color(255, 255, 255, 255).texture((float) 0.0, v1).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(normal.x, normal.y, normal.z);
         vc.vertex(matrix, x2, y1, (float) 0.0).color(255, 255, 255, 255).texture((float) 0.0, v2).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(normal.x, normal.y, normal.z);
         vc.vertex(matrix, x1, y1, (float) 0.0).color(255, 255, 255, 255).texture((float) 1.0, v2).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(normal.x, normal.y, normal.z);
+    }
+
+    private UUID resolvePlayerUuid(MinecraftClient client, PlayerEntityRenderState state) {
+        String playerName = null;
+        if (state.displayName != null) {
+            playerName = state.displayName.getString();
+            playerName = playerName.replaceAll("§.", "");
+        }
+
+        if (playerName == null || playerName.isEmpty()) {
+            if (client.player != null) {
+                playerName = client.player.getName().getString();
+            }
+        }
+
+        if (playerName == null || playerName.isEmpty()) {
+            return null;
+        }
+
+        var networkHandler = client.getNetworkHandler();
+        if (networkHandler == null) return null;
+
+        var playerEntry = networkHandler.getPlayerListEntry(playerName);
+        if (playerEntry == null) {
+            return null;
+        }
+
+        return playerEntry.getProfile().id();
+    }
+
+    private net.minecraft.util.Identifier getBaseMouthTexture(UUID uuid, boolean isLocalPlayer) {
+        if (isLocalPlayer) {
+            return MouthConfig.getMouth();
+        }
+        return PlayerMouthStorage.getMouth(uuid);
+    }
+
+    private net.minecraft.util.Identifier applyShoutVariant(net.minecraft.util.Identifier base, float volume) {
+        float screamThreshold = 0.99F;
+        if (volume < screamThreshold) {
+            return base;
+        }
+        String namespace = base.getNamespace();
+        String path = base.getPath();
+        int dotIndex = path.lastIndexOf('.');
+        String shoutPath;
+        if (dotIndex >= 0) {
+            shoutPath = path.substring(0, dotIndex) + "_shout" + path.substring(dotIndex);
+        } else {
+            shoutPath = path + "_shout";
+        }
+        return net.minecraft.util.Identifier.of(namespace, shoutPath);
     }
 }

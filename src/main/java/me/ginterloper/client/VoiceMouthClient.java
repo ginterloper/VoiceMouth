@@ -1,12 +1,14 @@
 package me.ginterloper.client;
 
+import me.ginterloper.client.config.MouthConfig;
+import me.ginterloper.client.render.MouthRenderer;
+import me.ginterloper.client.storage.PlayerMouthStorage;
 import me.ginterloper.network.SelectMouthC2SPayload;
 import me.ginterloper.network.SyncMouthS2CPayload;
-import me.ginterloper.renderer.MouthRenderer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
 
@@ -27,13 +29,13 @@ public class VoiceMouthClient implements ClientModInitializer {
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> PlayerMouthStorage.clear());
 
         LivingEntityFeatureRendererRegistrationCallback.EVENT.register(
-            (entityType, entityRenderer, registrationHelper, context) -> {
-                if (entityRenderer instanceof PlayerEntityRenderer playerRenderer) {
-                    registrationHelper.register(
-                            new MouthRenderer(playerRenderer)
-                    );
+                (entityType, entityRenderer, registrationHelper, context) -> {
+                    if (entityRenderer instanceof PlayerEntityRenderer playerRenderer) {
+                        registrationHelper.register(
+                                new MouthRenderer(playerRenderer)
+                        );
+                    }
                 }
-            }
         );
     }
 

@@ -141,19 +141,20 @@ public class MouthRenderer extends FeatureRenderer<PlayerEntityRenderState, Play
     }
 
     private net.minecraft.util.Identifier applyShoutVariant(net.minecraft.util.Identifier base, float volume) {
-        float screamThreshold = 0.99F;
-        if (volume < screamThreshold) {
-            return base;
-        }
-        String namespace = base.getNamespace();
-        String path = base.getPath();
-        int dotIndex = path.lastIndexOf('.');
-        String shoutPath;
-        if (dotIndex >= 0) {
-            shoutPath = path.substring(0, dotIndex) + "_shout" + path.substring(dotIndex);
-        } else {
-            shoutPath = path + "_shout";
-        }
-        return net.minecraft.util.Identifier.of(namespace, shoutPath);
+//        float screamThreshold = 0.99F;
+//        if (volume < screamThreshold) {
+//            return base;
+//        }
+//        String namespace = base.getNamespace();
+//        String path = base.getPath();
+//        int dotIndex = path.lastIndexOf('.');
+//        String shoutPath;
+//        if (dotIndex >= 0) {
+//            shoutPath = path.substring(0, dotIndex) + "_shout" + path.substring(dotIndex);
+//        } else {
+//            shoutPath = path + "_shout";
+//        }
+//        return net.minecraft.util.Identifier.of(namespace, shoutPath);
+        return base;
     }
 }

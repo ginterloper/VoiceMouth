@@ -1,8 +1,9 @@
-package com.example.mixin;
+package me.ginterloper.mixin;
 
-import com.example.client.gui.MouthSelectScreen;
+import me.ginterloper.client.gui.MouthSelectScreen;
 import de.maxhenkel.voicechat.gui.VoiceChatScreen;
 import de.maxhenkel.voicechat.gui.widgets.ImageButton;
+import me.ginterloper.core.ModConstants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.tooltip.Tooltip;
@@ -19,7 +20,7 @@ public abstract class VoiceChatScreenMixin extends Screen {
 
     @Unique
     private static final Identifier ICON =
-            Identifier.of("mouth-voice", "textures/gui/icon_in_game.png");
+            Identifier.of(ModConstants.MOD_ID, "textures/gui/icon_in_game.png");
 
     protected VoiceChatScreenMixin(Text title) {
         super(title);
@@ -35,7 +36,7 @@ public abstract class VoiceChatScreenMixin extends Screen {
                         new MouthSelectScreen()
                 )
         );
-        button.setTooltip(Tooltip.of(Text.translatable("gui.mouth_voice.select_mouth")));
+        button.setTooltip(Tooltip.of(Text.translatable("gui.voicemouth.select_mouth")));
         this.addDrawableChild(button);
     }
 

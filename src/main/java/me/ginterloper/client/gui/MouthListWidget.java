@@ -1,39 +1,32 @@
-package com.example.client.gui;
+package me.ginterloper.client.gui;
 
-import com.example.client.MouthConfig;
+import me.ginterloper.client.VoiceMouthClient;
+import me.ginterloper.client.config.MouthConfig;
+import me.ginterloper.core.ModConstants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.EntryListWidget;
 import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.sound.PositionedSoundInstance;
-import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.Click;
 
-import java.awt.*;
-
 public class MouthListWidget extends EntryListWidget<MouthListWidget.MouthEntry> {
 
-    private static final int ITEM_HEIGHT = 30;   // ← 24–30 — подбери визуально комфортное
+    private static final int ITEM_HEIGHT = 30;
     private static final int ICON_SIZE = 16;
+    private static final Identifier SELECTED_ICON = Identifier.of(ModConstants.MOD_ID, "textures/gui/mouth_selected.png");
 
     public MouthListWidget(MinecraftClient client, int width, int height, int top, int bottom) {
         super(client, width, height, top, bottom);
-        try {
-            java.lang.reflect.Field field = EntryListWidget.class.getDeclaredField("itemHeight");
-            field.setAccessible(true);
-            field.set(this, ITEM_HEIGHT);
-        } catch (Exception e) {
-            // логгируем ошибку, но не крашим игру
-            e.printStackTrace();
-        }
+        ((me.ginterloper.mixin.EntryListWidgetAccessor) this).voicemouth$setItemHeight(ITEM_HEIGHT);
     }
 
-    public void addMouth(String translationKey, Identifier texture, int texHeight) {
-        this.addEntry(new MouthEntry(translationKey, texture, texHeight));
+    public void addMouth(String translationKey, Identifier texture, int texHeight, float scale) {
+        this.addEntry(new MouthEntry(translationKey, texture, texHeight, scale));
     }
 
     @Override
@@ -41,14 +34,8 @@ public class MouthListWidget extends EntryListWidget<MouthListWidget.MouthEntry>
         return this.width - 8;
     }
 
-//    @Override
-//    protected int getScrollbarPositionX() {
-//        return this.getRight() - 6;
-//    }
-
     @Override
     protected void appendClickableNarrations(NarrationMessageBuilder builder) {
-        // пусто
     }
 
     public class MouthEntry extends Entry<MouthEntry> {
@@ -56,22 +43,26 @@ public class MouthListWidget extends EntryListWidget<MouthListWidget.MouthEntry>
         private final String translationKey;
         private final Identifier texture;
         private final int textureHeight;
+        private final float scale;
 
-        public MouthEntry(String translationKey, Identifier texture, int textureHeight) {
+        public MouthEntry(String translationKey, Identifier texture, int textureHeight, float scale) {
             this.translationKey = translationKey;
             this.texture = texture;
             this.textureHeight = textureHeight;
+            this.scale = scale;
         }
 
         @Override
         public boolean mouseClicked(Click click, boolean doubled) {
             MouthConfig.setMouth(this.texture);
-            MinecraftClient.getInstance().getSoundManager().play(
+            var client = MinecraftClient.getInstance();
+            client.getSoundManager().play(
                     PositionedSoundInstance.master(
                             SoundEvents.UI_BUTTON_CLICK.value(),
                             1.0f, 0.1f
                             )
-        );
+            );
+            VoiceMouthClient.syncSelectedMouthToServer();
             return super.mouseClicked(click, doubled);
         }
 
@@ -87,7 +78,7 @@ public class MouthListWidget extends EntryListWidget<MouthListWidget.MouthEntry>
             int iconX = x + 6;
 
             boolean isSelected = MouthConfig.getMouth().equals(this.texture);
-            int padding = 2;  // отступ сверху и снизу внутри строки
+            int padding = 2;
 
             int bgX = x - padding - 2;
             int bgY = y + padding;
@@ -103,8 +94,6 @@ public class MouthListWidget extends EntryListWidget<MouthListWidget.MouthEntry>
 
             int iconY = bgY + (bgHeight - ICON_SIZE) / 2;
 
-
-            // Анимация рта (как было)
             final int FRAME_SIZE = 16;
             final int FRAME_TIME_MS = 100;
             int totalFrames = textureHeight / FRAME_SIZE;
@@ -125,7 +114,6 @@ public class MouthListWidget extends EntryListWidget<MouthListWidget.MouthEntry>
                 textureHeight
             );
 
-            // Текст названия — можно сделать жирнее/ярче, если выбран
             context.drawText(
                     client.textRenderer,
                     Text.translatable(translationKey),
@@ -135,12 +123,10 @@ public class MouthListWidget extends EntryListWidget<MouthListWidget.MouthEntry>
                     false
             );
 
-            // Опционально: галочка слева или справа от иконки, если выбран
             if (isSelected) {
-                // Можно нарисовать простую галочку текстом или маленькой текстурой
                 context.drawTexture(
                         RenderPipelines.GUI_TEXTURED,
-                        Identifier.of("mouth-voice", "textures/gui/mouth_selected.png"),
+                        SELECTED_ICON,
                         iconX,
                         iconY,
                         0,

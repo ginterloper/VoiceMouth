@@ -1,0 +1,11 @@
+{
+  "gui.voicemouth.title": "Выбрать рот",
+  "gui.voicemouth.standard": "Стандартный",
+  "gui.voicemouth.realism": "Реализм",
+  "gui.voicemouth.lipped": "Губастый",
+  "gui.voicemouth.classic": "Классический",
+  "gui.voicemouth.minimal": "Миниатюрный",
+  "gui.voicemouth.select_mouth": "Нажмите, чтобы настроить отображение рта",
+  "gui.voicemouth.slider_x": "Положение рта на оси X",
+  "gui.voicemouth.slider_y": "Положение рта на оси Y"
+}

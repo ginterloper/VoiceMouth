@@ -1,9 +1,9 @@
 {
 	"schemaVersion": 1,
-	"id": "mouth-voice",
+	"id": "voice_mouth",
 	"version": "${version}",
-	"name": "Mouth Voice",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"name": "VoiceMouth",
+	"description": "This is a plugin for Simple Voice Chat that displays the mouth when the player speaks!",
 	"authors": [
 		"ginterloper"
 	],
@@ -11,17 +11,17 @@
 		"sources": "https://github.com/ginterloper/VoiceMouth/"
 	},
 	"license": "CC BY-NC 4.0",
-	"icon": "assets/mouth-voice/icon.png",
+	"icon": "assets/voicemouth/icon.png",
 	"environment": "*",
 	"entrypoints": {
         "main": [
-          "com.example.MouthVoice"
+          "me.ginterloper.VoiceMouth"
         ],
         "client": [
-          "com.example.client.MouthVoiceClient"
+          "me.ginterloper.client.VoiceMouthClient"
         ],
         "voicechat": [
-          "com.example.client.SimpleVoiceChatPlugin"
+          "me.ginterloper.client.SimpleVoiceChatPlugin"
         ]
 	},
 	"mixins": [

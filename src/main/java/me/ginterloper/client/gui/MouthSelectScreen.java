@@ -62,7 +62,8 @@ public class MouthSelectScreen extends Screen {
         ) {
             @Override
             protected void updateMessage() {
-                this.setMessage(Text.literal("X: " + String.format("%.1f", sliderToOffset(this.value))));
+                double offsetValue = sliderToOffset(this.value);
+                this.setMessage(Text.literal(String.format("X: %.1f", offsetValue)));
             }
 
             @Override
@@ -81,7 +82,8 @@ public class MouthSelectScreen extends Screen {
         ) {
             @Override
             protected void updateMessage() {
-                this.setMessage(Text.literal("Y: " + String.format("%.1f", sliderToOffset(this.value))));
+                double offsetValue = sliderToOffset(this.value);
+                this.setMessage(Text.literal(String.format("Y: %.1f", offsetValue)));
             }
 
             @Override

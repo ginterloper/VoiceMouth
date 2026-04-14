@@ -92,6 +92,7 @@ public class MouthConfig {
     public static void setOffsetX(float value) {
         offsetX = value;
         SAVE_EXECUTOR.execute(MouthConfig::save);
+        syncPositionToServer();
     }
 
     public static float getOffsetY() {
@@ -101,6 +102,17 @@ public class MouthConfig {
     public static void setOffsetY(float value) {
         offsetY = value;
         SAVE_EXECUTOR.execute(MouthConfig::save);
+        syncPositionToServer();
+    }
+
+    private static void syncPositionToServer() {
+        try {
+            Class<?> voiceMouthClientClass = Class.forName("me.ginterloper.client.VoiceMouthClient");
+            java.lang.reflect.Method method = voiceMouthClientClass.getDeclaredMethod("syncSelectedPositionToServer");
+            method.invoke(null);
+        } catch (Exception ignored) {
+            // VoiceMouthClient может быть недоступен на сервере или во время загрузки
+        }
     }
 
     public static void load() {

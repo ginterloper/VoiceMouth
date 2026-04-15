@@ -7,6 +7,7 @@ import me.ginterloper.client.storage.PlayerPositionStorage;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.RenderLayers;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.command.OrderedRenderCommandQueue;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
@@ -67,7 +68,7 @@ public class MouthRenderer extends FeatureRenderer<PlayerEntityRenderState, Play
 
         queue.submitCustom(
                 matrices,
-                RenderLayer.getEntityCutout(mouthTexture),
+                RenderLayers.entityCutout(mouthTexture),
                 (entry, vertexConsumer) -> {
 
                     Matrix4f m = entry.getPositionMatrix();

@@ -12,7 +12,6 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
-import net.minecraft.client.gui.Click;
 
 public class MouthListWidget extends EntryListWidget<MouthListWidget.MouthEntry> {
 
@@ -53,7 +52,7 @@ public class MouthListWidget extends EntryListWidget<MouthListWidget.MouthEntry>
         }
 
         @Override
-        public boolean mouseClicked(Click click, boolean doubled) {
+        public boolean mouseClicked(double mouseX, double mouseY, int button) {
             MouthConfig.setMouth(this.texture);
             var client = MinecraftClient.getInstance();
             client.getSoundManager().play(
@@ -63,17 +62,11 @@ public class MouthListWidget extends EntryListWidget<MouthListWidget.MouthEntry>
                             )
             );
             VoiceMouthClient.syncSelectedMouthToServer();
-            return super.mouseClicked(click, doubled);
+            return true;
         }
 
         @Override
-        public void render(DrawContext context, int mouseX, int mouseY, boolean hovered, float deltaTicks) {
-            int index = MouthListWidget.this.children().indexOf(this);
-            int x = MouthListWidget.this.getRowLeft();
-            int y = MouthListWidget.this.getRowTop(index);
-
-            int entryWidth = MouthListWidget.this.getRowWidth();
-            int entryHeight = MouthListWidget.this.itemHeight;
+        public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float deltaTicks) {
 
             int iconX = x + 6;
 
@@ -113,6 +106,8 @@ public class MouthListWidget extends EntryListWidget<MouthListWidget.MouthEntry>
                 ICON_SIZE,
                 textureHeight
             );
+
+            var client = MinecraftClient.getInstance();
 
             context.drawText(
                     client.textRenderer,

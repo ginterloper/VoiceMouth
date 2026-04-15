@@ -8,7 +8,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.command.OrderedRenderCommandQueue;
+import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
@@ -32,7 +32,7 @@ public class MouthRenderer extends FeatureRenderer<PlayerEntityRenderState, Play
 
     @Override
     public void render(MatrixStack matrices,
-                       OrderedRenderCommandQueue queue,
+                       VertexConsumerProvider vertexConsumers,
                        int light,
                        PlayerEntityRenderState state,
                        float limbAngle,
@@ -52,7 +52,6 @@ public class MouthRenderer extends FeatureRenderer<PlayerEntityRenderState, Play
         boolean isLocalPlayer = client.player != null && uuid.equals(client.player.getUuid());
         net.minecraft.util.Identifier mouthTexture = getBaseMouthTexture(uuid, isLocalPlayer);
 
-        mouthTexture = applyShoutVariant(mouthTexture);
 
         float scale = MouthConfig.getMouthScale(mouthTexture);
         float offsetX = isLocalPlayer ? MouthConfig.getOffsetX() : PlayerPositionStorage.getOffsetX(uuid);
@@ -65,35 +64,30 @@ public class MouthRenderer extends FeatureRenderer<PlayerEntityRenderState, Play
         matrices.translate(offsetX / 16F, offsetY / 16F, 0.0F);
         matrices.scale(1F / 16F, 1F / 16F, 1F / 16F);
 
-        queue.submitCustom(
-                matrices,
-                RenderLayer.getEntityCutout(mouthTexture),
-                (entry, vertexConsumer) -> {
+        VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityCutout(mouthTexture));
 
-                    Matrix4f m = entry.getPositionMatrix();
-                    Matrix3f n = entry.getNormalMatrix();
+        Matrix4f m = matrices.peek().getPositionMatrix();
+        Matrix3f n = matrices.peek().getNormalMatrix();
 
-                    Vector3f normal = new Vector3f(0F, 0F, -1F);
-                    n.transform(normal);
+        Vector3f normal = new Vector3f(0F, 0F, -1F);
+        n.transform(normal);
 
-                    int totalFrames = TEXTURE_HEIGHT / FRAME_SIZE;
+        int totalFrames = TEXTURE_HEIGHT / FRAME_SIZE;
 
-                    assert MinecraftClient.getInstance().world != null;
-                    long worldTime = MinecraftClient.getInstance().world.getTime();
-                    int frame = (int) ((worldTime / FRAME_TIME) % totalFrames);
+        assert MinecraftClient.getInstance().world != null;
+        long worldTime = MinecraftClient.getInstance().world.getTime();
+        int frame = (int) ((worldTime / FRAME_TIME) % totalFrames);
 
-                    float frameHeight = 1F / totalFrames;
-                    float vStart = frame * frameHeight;
-                    float vEnd = vStart + frameHeight;
+        float frameHeight = 1F / totalFrames;
+        float vStart = frame * frameHeight;
+        float vEnd = vStart + frameHeight;
 
-                    drawQuad(
-                            m, vertexConsumer, normal,
-                            -scale, -scale, scale, scale,
-                            vEnd,
-                            vStart,
-                            light
-                    );
-                }
+        drawQuad(
+                m, vertexConsumer, normal,
+                -scale, -scale, scale, scale,
+                vEnd,
+                vStart,
+                light
         );
         matrices.pop();
     }
@@ -130,7 +124,7 @@ public class MouthRenderer extends FeatureRenderer<PlayerEntityRenderState, Play
             return null;
         }
 
-        return playerEntry.getProfile().id();
+        return playerEntry.getProfile().getId();
     }
 
     private net.minecraft.util.Identifier getBaseMouthTexture(UUID uuid, boolean isLocalPlayer) {
@@ -140,9 +134,5 @@ public class MouthRenderer extends FeatureRenderer<PlayerEntityRenderState, Play
         }
         // Для локального игрока используем конфигурацию
         return MouthConfig.getMouth();
-    }
-
-    private net.minecraft.util.Identifier applyShoutVariant(net.minecraft.util.Identifier base) {
-        return base;
     }
 }

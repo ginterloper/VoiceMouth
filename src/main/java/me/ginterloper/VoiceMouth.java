@@ -34,7 +34,7 @@ public class VoiceMouth implements ModInitializer {
 			ServerPlayerEntity player = context.player();
 			UUID uuid = player.getUuid();
 			SERVER_MOUTH_MAP.put(uuid, mouthId);
-			for (ServerPlayerEntity other : net.fabricmc.fabric.api.networking.v1.PlayerLookup.world(player.getEntityWorld())) {
+			for (ServerPlayerEntity other : net.fabricmc.fabric.api.networking.v1.PlayerLookup.world(player.getWorld())) {
 				ServerPlayNetworking.send(other, new SyncMouthS2CPayload(uuid, mouthId));
 			}
 		});
@@ -45,7 +45,7 @@ public class VoiceMouth implements ModInitializer {
 			ServerPlayerEntity player = context.player();
 			UUID uuid = player.getUuid();
 			SERVER_POSITION_MAP.put(uuid, new float[]{offsetX, offsetY});
-			for (ServerPlayerEntity other : net.fabricmc.fabric.api.networking.v1.PlayerLookup.world(player.getEntityWorld())) {
+			for (ServerPlayerEntity other : net.fabricmc.fabric.api.networking.v1.PlayerLookup.world(player.getWorld())) {
 				ServerPlayNetworking.send(other, new SyncPositionS2CPayload(uuid, offsetX, offsetY));
 			}
 		});
